@@ -3,6 +3,7 @@ using SeleniumCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SeleniumCore
 {
@@ -10,7 +11,7 @@ namespace SeleniumCore
     {
         public ChromeOptions ChromeWebDriverOptions { get; private set; }
 
-        private ChromeDriver chromeDriver;
+        public ChromeDriver ChromeDriver { get; private set; }
 
         public SeleniumWebDriver(SeleniumSettings seleniumSettings)
         {
@@ -28,9 +29,14 @@ namespace SeleniumCore
             if (seleniumSettings.IsHeadless)
                 ChromeWebDriverOptions.AddArgument("headless");
 
-            var chromeDriverService = ChromeDriverService.CreateDefaultService();
+            var chromeDriverService = ChromeDriverService.CreateDefaultService(seleniumSettings.UserDataDir);
 
-            chromeDriver = new ChromeDriver(chromeDriverService, ChromeWebDriverOptions);
+            ChromeDriver = new ChromeDriver(chromeDriverService, ChromeWebDriverOptions);
+        }
+
+        public void GoToUrl(string url)
+        {
+           ChromeDriver.Navigate().GoToUrl(url);
         }
     }
 }

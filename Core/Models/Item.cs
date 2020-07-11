@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Shared.Interfaces;
+using System;
 
 namespace Core.Models
 {
-    public class Item
+    public class Item : IItem
     {
         public int Id { get; set; }
 

@@ -1,6 +1,8 @@
-﻿namespace Core.Models
+﻿using Shared.Interfaces;
+
+namespace Core.Models
 {
-    public class MarketItem : Item
+    public class MarketItem : Item, IMarketItem
     {
         public string GeneralId { get; set; }
 
