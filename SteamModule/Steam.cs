@@ -29,11 +29,9 @@ namespace SteamModule
         public async Task<T> GetPriceById(string id, T model)
         {
             string steamItemUrl = SteamConst.InfoSteamItemUrl(id);
-
-            string requestResult = null;
            
             var webClient = new WebClient();
-            requestResult = webClient.DownloadString(steamItemUrl);
+            string requestResult = webClient.DownloadString(steamItemUrl);
 
             var itemDto = JsonConvert.DeserializeObject<SteamItemBaseDto>(requestResult);
 
@@ -41,6 +39,33 @@ namespace SteamModule
                 FillPriceInModel(itemDto, model);
             else
                 throw new ItemNotFoundException($"Item with this Id: {id} was not found at Steam market");
+
+            return model;
+        }
+
+        /// <summary>
+        /// Return only Price and CountBySellPrice
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<T> GetShortPriceInfoByName(string name, T model)
+        {
+            string encodeName = HttpUtility.UrlEncode(name, Encoding.UTF8);
+            encodeName = encodeName.Replace("+", "%20"); // Replace space to code
+
+            string steamItemUrl = SteamConst.PriceSteamItemUrl(encodeName);
+
+            var webClient = new WebClient();
+            string requestResult = webClient.DownloadString(steamItemUrl);
+
+            var itemDto = JsonConvert.DeserializeObject<SteamShortPriceDto>(requestResult);
+
+            if(itemDto.IsSuccess)
+            {
+                model.Price = Convert.ToDouble(itemDto.LowestPrice);
+                model.SaleCount = Convert.ToInt32(itemDto.Volume);
+            }
 
             return model;
         }
@@ -110,6 +135,20 @@ namespace SteamModule
             }
 
             return model;
+        }
+
+        public Task GetSteamInventory(string steamId)
+        {
+            string steamInventoryUrl = SteamConst.SteamInventoryUrl(steamId);
+
+            var webClient = new WebClient();
+            string requestResult = webClient.DownloadString(steamInventoryUrl);
+
+            var fileResult = File.ReadAllText(@"H:\Works\Project\Core\TradeBot\json.txt");
+            var itemDto = JsonConvert.DeserializeObject<SteamInventoryDto>(fileResult);
+
+
+            throw new NotImplementedException();
         }
     }
 }

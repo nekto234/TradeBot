@@ -9,6 +9,10 @@ namespace Core.Models
 
         public string Name { get; set; }
 
+        public string ClassId { get; set; }
+
+        public string InstanceId { get; set; }
+
         public double Price { get; set; }
 
         public DateTime UpdatedAt { get; set; }

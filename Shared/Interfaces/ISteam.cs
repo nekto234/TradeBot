@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Shared.Interfaces
 {
@@ -10,5 +7,9 @@ namespace Shared.Interfaces
         Task<T> GetPriceById(string id, T model);
 
         Task<T> GetByName(string name, T model);
+
+        Task<T> GetShortPriceInfoByName(string name, T model);
+
+        Task GetSteamInventory(string steamId);
     }
 }
